@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="vi" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Board Game Newspaper</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&amp;family=Crimson+Text:ital,wght@0,400;0,600;1,400&amp;family=UnifrakturMaguntia&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    .newspaper-title {
+      font-family: 'UnifrakturMaguntia', cursive;
+    }
+    
+    .headline {
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .body-text {
+      font-family: 'Crimson Text', serif;
+    }
+    
+    .ornament {
+      background: linear-gradient(90deg, transparent, #2c1810, transparent);
+      height: 2px;
+    }
+    
+    .ornament-thick {
+      background: linear-gradient(90deg, transparent, #2c1810 20%, #2c1810 80%, transparent);
+      height: 3px;
+    }
+    
+    .column-divider {
+      border-left: 1px solid #2c1810;
+    }
+    
+    .newspaper-bg {
+      background: linear-gradient(135deg, #f5f0e6 0%, #ebe5d8 50%, #f0ebe0 100%);
+    }
+    
+    .aged-paper {
+      background: linear-gradient(to bottom, #f8f4eb, #f0ebe0, #e8e2d5);
+      box-shadow: inset 0 0 50px rgba(139, 119, 101, 0.1);
+    }
+    
+    .drop-cap::first-letter {
+      float: left;
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      line-height: 0.8;
+      padding-right: 0.5rem;
+      color: #2c1810;
+      font-weight: 700;
+    }
+    
+    .nav-tab {
+      transition: all 0.3s ease;
+      border: 1px solid #2c1810;
+    }
+    
+    .nav-tab:hover {
+      background: #2c1810;
+      color: #f5f0e6;
+    }
+    
+    .nav-tab.active {
+      background: #2c1810;
+      color: #f5f0e6;
+    }
+    
+    .member-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .member-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(44, 24, 16, 0.2);
+    }
+    
+    .quiz-option {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .quiz-option:hover {
+      background: #2c1810;
+      color: #f5f0e6;
+    }
+    
+    .quiz-option.selected {
+      background: #4a7c59;
+      color: #f5f0e6;
+      border-color: #4a7c59;
+    }
+    
+    .quiz-option.correct {
+      background: #4a7c59;
+      color: #f5f0e6;
+    }
+    
+    .quiz-option.incorrect {
+      background: #8b4049;
+      color: #f5f0e6;
+    }
+    
+    .image-frame {
+      border: 3px double #2c1810;
+      padding: 8px;
+      background: #fff;
+    }
+    
+    .scroll-container {
+      scrollbar-width: thin;
+      scrollbar-color: #2c1810 #f5f0e6;
+    }
+    
+    .scroll-container::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .scroll-container::-webkit-scrollbar-track {
+      background: #f5f0e6;
+    }
+    
+    .scroll-container::-webkit-scrollbar-thumb {
+      background: #2c1810;
+      border-radius: 4px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.5s ease forwards;
+    }
+    
+    .stagger-1 { animation-delay: 0.1s; }
+    .stagger-2 { animation-delay: 0.2s; }
+    .stagger-3 { animation-delay: 0.3s; }
+    .stagger-4 { animation-delay: 0.4s; }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full newspaper-bg">
+  <div id="app" class="h-full overflow-auto scroll-container"><!-- Header -->
+   <header class="aged-paper border-b-4 border-double border-[#2c1810] px-4 py-6">
+    <div class="max-w-6xl mx-auto text-center"><!-- Top ornament -->
+     <div class="flex items-center justify-center gap-4 mb-4">
+      <div class="ornament flex-1 max-w-32"></div><span class="text-[#2c1810] text-sm body-text">✦ Số Đặc Biệt ✦</span>
+      <div class="ornament flex-1 max-w-32"></div>
+     </div><!-- Newspaper Title -->
+     <h1 id="newspaper-title" class="newspaper-title text-5xl md:text-7xl text-[#2c1810] mb-2">The Board Game Times</h1><!-- Subtitle -->
+     <p class="body-text text-[#5c4a3d] italic text-lg">"Nơi hội tụ những trí tuệ và niềm vui"</p><!-- Date line -->
+     <div class="flex items-center justify-center gap-4 mt-4">
+      <div class="ornament-thick flex-1 max-w-48"></div><span class="text-[#2c1810] text-xs body-text tracking-widest uppercase"> Ấn Bản Giới Thiệu Dự Án • 2024 </span>
+      <div class="ornament-thick flex-1 max-w-48"></div>
+     </div>
+    </div>
+   </header><!-- Navigation -->
+   <nav class="bg-[#f5f0e6] border-b-2 border-[#2c1810] sticky top-0 z-50 px-4 py-3">
+    <div class="max-w-6xl mx-auto">
+     <div class="flex flex-wrap justify-center gap-2 md:gap-4"><button onclick="showSection('home')" class="nav-tab active px-4 py-2 text-sm headline font-bold text-[#2c1810]" data-section="home"> 🏠 Trang Chủ </button> <button onclick="showSection('team')" class="nav-tab px-4 py-2 text-sm headline font-bold text-[#2c1810]" data-section="team"> 👥 Thành Viên </button> <button onclick="showSection('rules')" class="nav-tab px-4 py-2 text-sm headline font-bold text-[#2c1810]" data-section="rules"> 📜 Luật Chơi </button> <button onclick="showSection('gallery')" class="nav-tab px-4 py-2 text-sm headline font-bold text-[#2c1810]" data-section="gallery"> 🖼️ Hình Ảnh </button> <button onclick="showSection('quiz')" class="nav-tab px-4 py-2 text-sm headline font-bold text-[#2c1810]" data-section="quiz"> ❓ Câu Hỏi </button>
+     </div>
+    </div>
+   </nav><!-- Main Content -->
+   <main class="max-w-6xl mx-auto px-4 py-8"><!-- HOME SECTION -->
+    <section id="section-home" class="section-content"><!-- Main Headline -->
+     <div class="text-center mb-8 fade-in">
+      <h2 id="game-name" class="headline text-4xl md:text-6xl font-black text-[#2c1810] leading-tight mb-4">ADVENTURE QUEST</h2>
+      <p class="headline text-xl md:text-2xl text-[#5c4a3d] italic">Board Game Phiêu Lưu Kỳ Thú Nhất Năm 2024</p>
+     </div><!-- Three Column Layout -->
+     <div class="grid md:grid-cols-3 gap-6 md:gap-0"><!-- Column 1 -->
+      <div class="md:pr-6 fade-in stagger-1">
+       <h3 class="headline text-xl font-bold text-[#2c1810] border-b-2 border-[#2c1810] pb-2 mb-4">TIN NÓNG HỔI</h3>
+       <div class="body-text text-[#2c1810] leading-relaxed">
+        <p id="intro-text" class="drop-cap mb-4">Một dự án board game đầy sáng tạo đã chính thức ra mắt! Với gameplay độc đáo, đồ họa tuyệt đẹp và những thử thách hấp dẫn, đây hứa hẹn sẽ là trò chơi không thể thiếu trong mỗi buổi họp mặt.</p>
+        <p class="mb-4">Trò chơi được thiết kế dành cho 2-6 người chơi, phù hợp với mọi lứa tuổi từ 8 tuổi trở lên. Mỗi ván chơi kéo dài khoảng 30-60 phút.</p>
+       </div>
+      </div><!-- Column 2 -->
+      <div class="md:px-6 md:border-x border-[#2c1810] fade-in stagger-2">
+       <h3 class="headline text-xl font-bold text-[#2c1810] border-b-2 border-[#2c1810] pb-2 mb-4">ĐIỂM NỔI BẬT</h3><!-- Featured Image Area -->
+       <div class="image-frame mb-4">
+        <div class="aspect-video bg-gradient-to-br from-[#4a7c59] via-[#6b9b7a] to-[#8bb49b] flex items-center justify-center">
+         <div class="text-center text-white">
+          <div class="text-6xl mb-2">
+           🎲
+          </div>
+          <p class="headline font-bold text-lg">BOARD GAME</p>
+          <p class="body-text italic text-sm">Khám phá thế giới mới</p>
+         </div>
+        </div>
+       </div>
+       <div class="body-text text-[#2c1810] text-sm leading-relaxed">
+        <p class="italic text-center">"Mỗi ván chơi là một câu chuyện, mỗi lượt đi là một quyết định định mệnh"</p>
+       </div>
+      </div><!-- Column 3 -->
+      <div class="md:pl-6 fade-in stagger-3">
+       <h3 class="headline text-xl font-bold text-[#2c1810] border-b-2 border-[#2c1810] pb-2 mb-4">TÍNH NĂNG</h3>
+       <ul class="body-text text-[#2c1810] space-y-3">
+        <li class="flex items-start gap-2"><span class="text-[#4a7c59]">✦</span> <span>Hệ thống thẻ bài đa dạng với hơn 100 thẻ khác nhau</span></li>
+        <li class="flex items-start gap-2"><span class="text-[#4a7c59]">✦</span> <span>Bản đồ phiêu lưu có thể thay đổi mỗi ván</span></li>
+        <li class="flex items-start gap-2"><span class="text-[#4a7c59]">✦</span> <span>Nhiều chế độ chơi: Hợp tác, Đối kháng, Solo</span></li>
+        <li class="flex items-start gap-2"><span class="text-[#4a7c59]">✦</span> <span>Thiết kế thân thiện với người mới</span></li>
+        <li class="flex items-start gap-2"><span class="text-[#4a7c59]">✦</span> <span>Chất liệu cao cấp, bền đẹp theo thời gian</span></li>
+       </ul>
+      </div>
+     </div>
+    </section><!-- TEAM SECTION -->
+    <section id="section-team" class="section-content hidden">
+     <div class="text-center mb-8 fade-in">
+      <h2 class="headline text-4xl font-black text-[#2c1810] mb-2">ĐỘI NGŨ SÁNG TẠO</h2>
+      <p id="team-name" class="body-text text-[#5c4a3d] italic text-lg">Team Creative Minds</p>
+      <div class="ornament-thick max-w-64 mx-auto mt-4"></div>
+     </div>
+     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"><!-- Member 1 -->
+      <div class="member-card aged-paper border-2 border-[#2c1810] p-6 text-center fade-in stagger-1">
+       <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#8b4049] to-[#6b2d35] flex items-center justify-center text-4xl">
+        👨‍💼
+       </div>
+       <h3 class="headline text-xl font-bold text-[#2c1810]">Nguyễn Văn A</h3>
+       <p class="body-text text-[#5c4a3d] italic mb-2">Team Leader</p>
+       <div class="ornament max-w-16 mx-auto my-3"></div>
+       <p class="body-text text-sm text-[#2c1810]">Chịu trách nhiệm quản lý dự án và định hướng thiết kế game</p>
+      </div><!-- Member 2 -->
+      <div class="member-card aged-paper border-2 border-[#2c1810] p-6 text-center fade-in stagger-2">
+       <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#4a7c59] to-[#365d42] flex items-center justify-center text-4xl">
+        👩‍🎨
+       </div>
+       <h3 class="headline text-xl font-bold text-[#2c1810]">Trần Thị B</h3>
+       <p class="body-text text-[#5c4a3d] italic mb-2">Art Director</p>
+       <div class="ornament max-w-16 mx-auto my-3"></div>
+       <p class="body-text text-sm text-[#2c1810]">Thiết kế hình ảnh, minh họa và phong cách nghệ thuật</p>
+      </div><!-- Member 3 -->
+      <div class="member-card aged-paper border-2 border-[#2c1810] p-6 text-center fade-in stagger-3">
+       <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#c9a227] to-[#9a7b1c] flex items-center justify-center text-4xl">
+        👨‍💻
+       </div>
+       <h3 class="headline text-xl font-bold text-[#2c1810]">Lê Văn C</h3>
+       <p class="body-text text-[#5c4a3d] italic mb-2">Game Designer</p>
+       <div class="ornament max-w-16 mx-auto my-3"></div>
+       <p class="body-text text-sm text-[#2c1810]">Xây dựng cơ chế game và cân bằng gameplay</p>
+      </div><!-- Member 4 -->
+      <div class="member-card aged-paper border-2 border-[#2c1810] p-6 text-center fade-in stagger-4">
+       <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#5c4a8c] to-[#443668] flex items-center justify-center text-4xl">
+        👩‍🔬
+       </div>
+       <h3 class="headline text-xl font-bold text-[#2c1810]">Phạm Thị D</h3>
+       <p class="body-text text-[#5c4a3d] italic mb-2">Content Writer</p>
+       <div class="ornament max-w-16 mx-auto my-3"></div>
+       <p class="body-text text-sm text-[#2c1810]">Viết nội dung, câu chuyện và mô tả thẻ bài</p>
+      </div><!-- Member 5 -->
+      <div class="member-card aged-paper border-2 border-[#2c1810] p-6 text-center fade-in stagger-1">
+       <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#2c6e8c] to-[#1f4f64] flex items-center justify-center text-4xl">
+        👨‍🏭
+       </div>
+       <h3 class="headline text-xl font-bold text-[#2c1810]">Hoàng Văn E</h3>
+       <p class="body-text text-[#5c4a3d] italic mb-2">Production</p>
+       <div class="ornament max-w-16 mx-auto my-3"></div>
+       <p class="body-text text-sm text-[#2c1810]">Quản lý sản xuất và kiểm tra chất lượng sản phẩm</p>
+      </div><!-- Member 6 -->
+      <div class="member-card aged-paper border-2 border-[#2c1810] p-6 text-center fade-in stagger-2">
+       <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#8c5c3c] to-[#6b4530] flex items-center justify-center text-4xl">
+        👩‍💼
+       </div>
+       <h3 class="headline text-xl font-bold text-[#2c1810]">Đỗ Thị F</h3>
+       <p class="body-text text-[#5c4a3d] italic mb-2">Marketing</p>
+       <div class="ornament max-w-16 mx-auto my-3"></div>
+       <p class="body-text text-sm text-[#2c1810]">Chiến lược marketing và truyền thông sản phẩm</p>
+      </div>
+     </div>
+    </section><!-- RULES SECTION -->
+    <section id="section-rules" class="section-content hidden">
+     <div class="text-center mb-8 fade-in">
+      <h2 class="headline text-4xl font-black text-[#2c1810] mb-2">LUẬT CHƠI</h2>
+      <p class="body-text text-[#5c4a3d] italic text-lg">Hướng dẫn chi tiết cách chơi Adventure Quest</p>
+      <div class="ornament-thick max-w-64 mx-auto mt-4"></div>
+     </div>
+     <div class="grid md:grid-cols-2 gap-8"><!-- Left Column -->
+      <div class="fade-in stagger-1"><!-- Setup -->
+       <div class="aged-paper border-2 border-[#2c1810] p-6 mb-6">
+        <h3 class="headline text-2xl font-bold text-[#2c1810] flex items-center gap-2 mb-4"><span class="text-3xl">📦</span> Chuẩn Bị</h3>
+        <ol class="body-text text-[#2c1810] space-y-3 list-decimal list-inside">
+         <li>Trải bản đồ ra giữa bàn chơi</li>
+         <li>Xáo bộ thẻ sự kiện và đặt úp xuống</li>
+         <li>Mỗi người chọn 1 nhân vật và nhận 5 thẻ khởi đầu</li>
+         <li>Đặt quân cờ tại vị trí xuất phát</li>
+         <li>Người nhỏ tuổi nhất đi trước</li>
+        </ol>
+       </div><!-- Turn Structure -->
+       <div class="aged-paper border-2 border-[#2c1810] p-6">
+        <h3 class="headline text-2xl font-bold text-[#2c1810] flex items-center gap-2 mb-4"><span class="text-3xl">🔄</span> Cấu Trúc Lượt</h3>
+        <div class="body-text text-[#2c1810] space-y-4">
+         <div class="border-l-4 border-[#4a7c59] pl-4">
+          <h4 class="font-bold">Giai đoạn 1: Rút Thẻ</h4>
+          <p class="text-sm">Rút 1 thẻ từ bộ bài chung</p>
+         </div>
+         <div class="border-l-4 border-[#c9a227] pl-4">
+          <h4 class="font-bold">Giai đoạn 2: Di Chuyển</h4>
+          <p class="text-sm">Tung xúc xắc và di chuyển số ô tương ứng</p>
+         </div>
+         <div class="border-l-4 border-[#8b4049] pl-4">
+          <h4 class="font-bold">Giai đoạn 3: Hành Động</h4>
+          <p class="text-sm">Thực hiện hành động theo ô đứng hoặc chơi thẻ</p>
+         </div>
+         <div class="border-l-4 border-[#5c4a8c] pl-4">
+          <h4 class="font-bold">Giai đoạn 4: Kết Thúc</h4>
+          <p class="text-sm">Bỏ thẻ nếu quá 7 thẻ trên tay</p>
+         </div>
+        </div>
+       </div>
+      </div><!-- Right Column -->
+      <div class="fade-in stagger-2"><!-- Win Condition -->
+       <div class="aged-paper border-2 border-[#2c1810] p-6 mb-6">
+        <h3 class="headline text-2xl font-bold text-[#2c1810] flex items-center gap-2 mb-4"><span class="text-3xl">🏆</span> Điều Kiện Thắng</h3>
+        <div class="body-text text-[#2c1810]">
+         <p class="mb-4">Người chơi đầu tiên hoàn thành <strong>3 trong 5</strong> nhiệm vụ sau sẽ chiến thắng:</p>
+         <ul class="space-y-2">
+          <li class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-[#4a7c59] text-white text-xs flex items-center justify-center">1</span> Thu thập 10 điểm kinh nghiệm</li>
+          <li class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-[#4a7c59] text-white text-xs flex items-center justify-center">2</span> Đánh bại 3 quái vật</li>
+          <li class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-[#4a7c59] text-white text-xs flex items-center justify-center">3</span> Khám phá 5 địa điểm bí ẩn</li>
+          <li class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-[#4a7c59] text-white text-xs flex items-center justify-center">4</span> Sở hữu 15 vàng</li>
+          <li class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-[#4a7c59] text-white text-xs flex items-center justify-center">5</span> Hoàn thành nhiệm vụ chính</li>
+         </ul>
+        </div>
+       </div><!-- Special Rules -->
+       <div class="aged-paper border-2 border-[#2c1810] p-6">
+        <h3 class="headline text-2xl font-bold text-[#2c1810] flex items-center gap-2 mb-4"><span class="text-3xl">⚡</span> Luật Đặc Biệt</h3>
+        <div class="body-text text-[#2c1810] space-y-3">
+         <div class="bg-[#f5f0e6] p-3 border border-dashed border-[#2c1810]"><strong>🎯 Combo:</strong> Chơi 3 thẻ cùng màu để kích hoạt hiệu ứng đặc biệt
+         </div>
+         <div class="bg-[#f5f0e6] p-3 border border-dashed border-[#2c1810]"><strong>🛡️ Phản Đòn:</strong> Có thể chơi thẻ phòng thủ bất kỳ lúc nào
+         </div>
+         <div class="bg-[#f5f0e6] p-3 border border-dashed border-[#2c1810]"><strong>🤝 Liên Minh:</strong> Hai người chơi có thể tạm thời hợp tác
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- GALLERY SECTION -->
+    <section id="section-gallery" class="section-content hidden">
+     <div class="text-center mb-8 fade-in">
+      <h2 class="headline text-4xl font-black text-[#2c1810] mb-2">HÌNH ẢNH SẢN PHẨM</h2>
+      <p class="body-text text-[#5c4a3d] italic text-lg">Khám phá vẻ đẹp của Adventure Quest</p>
+      <div class="ornament-thick max-w-64 mx-auto mt-4"></div>
+     </div>
+     <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6"><!-- Image 1 - Box Art -->
+      <div class="image-frame fade-in stagger-1">
+       <div class="aspect-square bg-gradient-to-br from-[#2c1810] via-[#4a3228] to-[#1a0f0a] flex items-center justify-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20">
+         <div class="absolute top-4 left-4 text-6xl">
+          🏰
+         </div>
+         <div class="absolute bottom-4 right-4 text-6xl">
+          🐉
+         </div>
+        </div>
+        <div class="text-center z-10">
+         <div class="text-5xl mb-2">
+          📦
+         </div>
+         <p class="headline text-white font-bold">Box Art</p>
+        </div>
+       </div>
+       <p class="body-text text-xs text-center mt-2 text-[#5c4a3d]">Hộp game chính</p>
+      </div><!-- Image 2 - Game Board -->
+      <div class="image-frame fade-in stagger-2">
+       <div class="aspect-square bg-gradient-to-br from-[#4a7c59] via-[#5d9970] to-[#3d6b4a] flex items-center justify-center relative">
+        <div class="absolute inset-4 border-2 border-dashed border-white/30 rounded"></div>
+        <div class="text-center">
+         <div class="text-5xl mb-2">
+          🗺️
+         </div>
+         <p class="headline text-white font-bold">Game Board</p>
+        </div>
+       </div>
+       <p class="body-text text-xs text-center mt-2 text-[#5c4a3d]">Bản đồ phiêu lưu</p>
+      </div><!-- Image 3 - Cards -->
+      <div class="image-frame fade-in stagger-3">
+       <div class="aspect-square bg-gradient-to-br from-[#c9a227] via-[#dbb62f] to-[#a88820] flex items-center justify-center relative">
+        <div class="absolute top-2 left-2 w-12 h-16 bg-white/20 rounded transform -rotate-12"></div>
+        <div class="absolute top-4 left-6 w-12 h-16 bg-white/30 rounded transform rotate-6"></div>
+        <div class="text-center z-10">
+         <div class="text-5xl mb-2">
+          🃏
+         </div>
+         <p class="headline text-white font-bold">Cards</p>
+        </div>
+       </div>
+       <p class="body-text text-xs text-center mt-2 text-[#5c4a3d]">Bộ thẻ bài</p>
+      </div><!-- Image 4 - Characters -->
+      <div class="image-frame fade-in stagger-4">
+       <div class="aspect-square bg-gradient-to-br from-[#8b4049] via-[#a04d58] to-[#722f37] flex items-center justify-center">
+        <div class="text-center">
+         <div class="flex justify-center gap-1 text-3xl mb-2"><span>🧙</span><span>🧝</span><span>🦸</span>
+         </div>
+         <p class="headline text-white font-bold">Characters</p>
+        </div>
+       </div>
+       <p class="body-text text-xs text-center mt-2 text-[#5c4a3d]">Nhân vật chơi</p>
+      </div><!-- Image 5 - Dice & Tokens -->
+      <div class="image-frame fade-in stagger-1">
+       <div class="aspect-square bg-gradient-to-br from-[#5c4a8c] via-[#6d5a9e] to-[#4a3a72] flex items-center justify-center">
+        <div class="text-center">
+         <div class="flex justify-center gap-2 text-3xl mb-2"><span>🎲</span><span>🪙</span><span>💎</span>
+         </div>
+         <p class="headline text-white font-bold">Tokens</p>
+        </div>
+       </div>
+       <p class="body-text text-xs text-center mt-2 text-[#5c4a3d]">Xúc xắc &amp; Token</p>
+      </div><!-- Image 6 - Gameplay -->
+      <div class="image-frame fade-in stagger-2">
+       <div class="aspect-square bg-gradient-to-br from-[#2c6e8c] via-[#3a8aac] to-[#1f5269] flex items-center justify-center">
+        <div class="text-center">
+         <div class="text-5xl mb-2">
+          🎮
+         </div>
+         <p class="headline text-white font-bold">Gameplay</p>
+        </div>
+       </div>
+       <p class="body-text text-xs text-center mt-2 text-[#5c4a3d]">Hình ảnh chơi game</p>
+      </div>
+     </div><!-- Additional Info -->
+     <div class="mt-8 aged-paper border-2 border-[#2c1810] p-6 fade-in">
+      <h3 class="headline text-xl font-bold text-[#2c1810] text-center mb-4">📦 Trong Hộp Gồm Có</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 body-text text-[#2c1810] text-center">
+       <div class="p-3 border border-dashed border-[#2c1810]">
+        <div class="text-2xl mb-1">
+         🗺️
+        </div>
+        <p class="font-bold">1</p>
+        <p class="text-xs">Bản đồ game</p>
+       </div>
+       <div class="p-3 border border-dashed border-[#2c1810]">
+        <div class="text-2xl mb-1">
+         🃏
+        </div>
+        <p class="font-bold">120</p>
+        <p class="text-xs">Thẻ bài</p>
+       </div>
+       <div class="p-3 border border-dashed border-[#2c1810]">
+        <div class="text-2xl mb-1">
+         🎲
+        </div>
+        <p class="font-bold">4</p>
+        <p class="text-xs">Xúc xắc</p>
+       </div>
+       <div class="p-3 border border-dashed border-[#2c1810]">
+        <div class="text-2xl mb-1">
+         🧩
+        </div>
+        <p class="font-bold">6</p>
+        <p class="text-xs">Quân cờ</p>
+       </div>
+      </div>
+     </div>
+    </section><!-- QUIZ SECTION -->
+    <section id="section-quiz" class="section-content hidden">
+     <div class="text-center mb-8 fade-in">
+      <h2 class="headline text-4xl font-black text-[#2c1810] mb-2">CHẶNG CÂU HỎI</h2>
+      <p class="body-text text-[#5c4a3d] italic text-lg">Kiểm tra kiến thức về Adventure Quest!</p>
+      <div class="ornament-thick max-w-64 mx-auto mt-4"></div>
+     </div><!-- Quiz Container -->
+     <div class="max-w-2xl mx-auto"><!-- Score Display -->
+      <div class="aged-paper border-2 border-[#2c1810] p-4 mb-6 flex justify-between items-center fade-in">
+       <div class="headline font-bold text-[#2c1810]">
+        Câu hỏi: <span id="current-question">1</span>/5
+       </div>
+       <div class="headline font-bold text-[#4a7c59]">
+        Điểm: <span id="score">0</span>
+       </div>
+      </div><!-- Question Card -->
+      <div id="quiz-card" class="aged-paper border-2 border-[#2c1810] p-6 fade-in">
+       <h3 id="question-text" class="headline text-xl font-bold text-[#2c1810] mb-6 text-center">Adventure Quest phù hợp với bao nhiêu người chơi?</h3>
+       <div id="options-container" class="space-y-3"><!-- Options will be rendered here -->
+       </div><!-- Feedback -->
+       <div id="feedback" class="mt-6 text-center hidden">
+        <p id="feedback-text" class="headline text-lg font-bold"></p>
+        <p id="explanation" class="body-text text-sm mt-2 text-[#5c4a3d]"></p>
+       </div><!-- Next Button -->
+       <div class="mt-6 text-center"><button id="next-btn" onclick="nextQuestion()" class="hidden nav-tab px-6 py-3 headline font-bold text-[#2c1810]"> Câu Tiếp Theo → </button>
+       </div>
+      </div><!-- Result Card -->
+      <div id="result-card" class="hidden aged-paper border-2 border-[#2c1810] p-8 text-center fade-in">
+       <div class="text-6xl mb-4" id="result-emoji">
+        🏆
+       </div>
+       <h3 class="headline text-3xl font-black text-[#2c1810] mb-2">Hoàn Thành!</h3>
+       <p class="body-text text-xl text-[#5c4a3d] mb-4">Bạn đạt <span id="final-score" class="text-[#4a7c59] font-bold">0</span>/5 điểm</p>
+       <p id="result-message" class="body-text text-[#2c1810] mb-6"></p><button onclick="restartQuiz()" class="nav-tab px-6 py-3 headline font-bold text-[#2c1810]"> 🔄 Chơi Lại </button>
+      </div>
+     </div>
+    </section>
+   </main><!-- Footer -->
+   <footer class="aged-paper border-t-4 border-double border-[#2c1810] px-4 py-6 mt-8">
+    <div class="max-w-6xl mx-auto text-center">
+     <div class="ornament-thick max-w-32 mx-auto mb-4"></div>
+     <p class="body-text text-[#5c4a3d] text-sm">© 2024 Adventure Quest • Một sản phẩm của Team Creative Minds</p>
+     <p class="body-text text-[#8b7355] text-xs mt-2 italic">"Chơi game không chỉ là giải trí, mà còn là kết nối"</p>
+    </div>
+   </footer>
+  </div>
+  <script>
+    // Default Configuration
+    const defaultConfig = {
+      newspaper_title: 'The Board Game Times',
+      game_name: 'ADVENTURE QUEST',
+      intro_text: 'Một dự án board game đầy sáng tạo đã chính thức ra mắt! Với gameplay độc đáo, đồ họa tuyệt đẹp và những thử thách hấp dẫn, đây hứa hẹn sẽ là trò chơi không thể thiếu trong mỗi buổi họp mặt.',
+      team_name: 'Team Creative Minds',
+      primary_color: '#2c1810',
+      secondary_color: '#4a7c59',
+      background_color: '#f5f0e6',
+      text_color: '#2c1810',
+      accent_color: '#c9a227',
+      font_family: 'Playfair Display',
+      font_size: 16
+    };
+
+    let config = { ...defaultConfig };
+
+    // Quiz Data
+    const quizData = [
+      {
+        question: "Adventure Quest phù hợp với bao nhiêu người chơi?",
+        options: ["1-2 người", "2-6 người", "4-8 người", "6-10 người"],
+        correct: 1,
+        explanation: "Trò chơi được thiết kế tối ưu cho 2-6 người chơi!"
+      },
+      {
+        question: "Mỗi ván chơi kéo dài bao lâu?",
+        options: ["10-15 phút", "30-60 phút", "2-3 giờ", "Cả ngày"],
+        correct: 1,
+        explanation: "Thời gian chơi trung bình là 30-60 phút, vừa đủ để thư giãn!"
+      },
+      {
+        question: "Có bao nhiêu thẻ bài trong bộ game?",
+        options: ["50 thẻ", "80 thẻ", "120 thẻ", "200 thẻ"],
+        correct: 2,
+        explanation: "Bộ game có 120 thẻ bài đa dạng với nhiều loại hiệu ứng!"
+      },
+      {
+        question: "Để thắng, cần hoàn thành bao nhiêu nhiệm vụ?",
+        options: ["2 trong 5", "3 trong 5", "4 trong 5", "Tất cả 5"],
+        correct: 1,
+        explanation: "Chỉ cần hoàn thành 3 trong 5 nhiệm vụ là chiến thắng!"
+      },
+      {
+        question: "Độ tuổi phù hợp để chơi Adventure Quest?",
+        options: ["5 tuổi+", "8 tuổi+", "12 tuổi+", "16 tuổi+"],
+        correct: 1,
+        explanation: "Trò chơi phù hợp với mọi lứa tuổi từ 8 tuổi trở lên!"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let answered = false;
+
+    // Navigation Functions
+    function showSection(sectionId) {
+      // Hide all sections
+      document.querySelectorAll('.section-content').forEach(section => {
+        section.classList.add('hidden');
+      });
+      
+      // Remove active class from all tabs
+      document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Show selected section
+      const targetSection = document.getElementById(`section-${sectionId}`);
+      if (targetSection) {
+        targetSection.classList.remove('hidden');
+      }
+      
+      // Add active class to clicked tab
+      const activeTab = document.querySelector(`[data-section="${sectionId}"]`);
+      if (activeTab) {
+        activeTab.classList.add('active');
+      }
+
+      // Initialize quiz if showing quiz section
+      if (sectionId === 'quiz' && currentQuestion === 0) {
+        renderQuestion();
+      }
+    }
+
+    // Quiz Functions
+    function renderQuestion() {
+      const question = quizData[currentQuestion];
+      document.getElementById('question-text').textContent = question.question;
+      document.getElementById('current-question').textContent = currentQuestion + 1;
+      
+      const optionsContainer = document.getElementById('options-container');
+      optionsContainer.innerHTML = '';
+      
+      question.options.forEach((option, index) => {
+        const optionEl = document.createElement('button');
+        optionEl.className = 'quiz-option w-full p-4 border-2 border-[#2c1810] body-text text-left text-[#2c1810]';
+        optionEl.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
+        optionEl.onclick = () => selectAnswer(index);
+        optionsContainer.appendChild(optionEl);
+      });
+
+      document.getElementById('feedback').classList.add('hidden');
+      document.getElementById('next-btn').classList.add('hidden');
+      answered = false;
+    }
+
+    function selectAnswer(index) {
+      if (answered) return;
+      answered = true;
+
+      const question = quizData[currentQuestion];
+      const options = document.querySelectorAll('.quiz-option');
+      
+      options.forEach((opt, i) => {
+        opt.classList.remove('selected');
+        if (i === question.correct) {
+          opt.classList.add('correct');
+        } else if (i === index && i !== question.correct) {
+          opt.classList.add('incorrect');
+        }
+      });
+
+      const feedbackEl = document.getElementById('feedback');
+      const feedbackText = document.getElementById('feedback-text');
+      const explanation = document.getElementById('explanation');
+
+      if (index === question.correct) {
+        score++;
+        document.getElementById('score').textContent = score;
+        feedbackText.textContent = '✅ Chính xác!';
+        feedbackText.className = 'headline text-lg font-bold text-[#4a7c59]';
+      } else {
+        feedbackText.textContent = '❌ Sai rồi!';
+        feedbackText.className = 'headline text-lg font-bold text-[#8b4049]';
+      }
+
+      explanation.textContent = question.explanation;
+      feedbackEl.classList.remove('hidden');
+
+      const nextBtn = document.getElementById('next-btn');
+      if (currentQuestion < quizData.length - 1) {
+        nextBtn.textContent = 'Câu Tiếp Theo →';
+      } else {
+        nextBtn.textContent = 'Xem Kết Quả';
+      }
+      nextBtn.classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      
+      if (currentQuestion >= quizData.length) {
+        showResults();
+      } else {
+        renderQuestion();
+      }
+    }
+
+    function showResults() {
+      document.getElementById('quiz-card').classList.add('hidden');
+      document.getElementById('result-card').classList.remove('hidden');
+      document.getElementById('final-score').textContent = score;
+
+      const resultEmoji = document.getElementById('result-emoji');
+      const resultMessage = document.getElementById('result-message');
+
+      if (score === 5) {
+        resultEmoji.textContent = '🏆';
+        resultMessage.textContent = 'Tuyệt vời! Bạn là chuyên gia về Adventure Quest!';
+      } else if (score >= 3) {
+        resultEmoji.textContent = '🌟';
+        resultMessage.textContent = 'Khá tốt! Bạn đã nắm được những điều cơ bản!';
+      } else {
+        resultEmoji.textContent = '📚';
+        resultMessage.textContent = 'Hãy đọc thêm về game và thử lại nhé!';
+      }
+    }
+
+    function restartQuiz() {
+      currentQuestion = 0;
+      score = 0;
+      answered = false;
+      document.getElementById('score').textContent = '0';
+      document.getElementById('quiz-card').classList.remove('hidden');
+      document.getElementById('result-card').classList.add('hidden');
+      renderQuestion();
+    }
+
+    // Config Change Handler
+    async function onConfigChange(newConfig) {
+      config = { ...defaultConfig, ...newConfig };
+      
+      // Update newspaper title
+      const newspaperTitle = document.getElementById('newspaper-title');
+      if (newspaperTitle) {
+        newspaperTitle.textContent = config.newspaper_title || defaultConfig.newspaper_title;
+      }
+
+      // Update game name
+      const gameName = document.getElementById('game-name');
+      if (gameName) {
+        gameName.textContent = config.game_name || defaultConfig.game_name;
+      }
+
+      // Update intro text
+      const introText = document.getElementById('intro-text');
+      if (introText) {
+        introText.textContent = config.intro_text || defaultConfig.intro_text;
+      }
+
+      // Update team name
+      const teamName = document.getElementById('team-name');
+      if (teamName) {
+        teamName.textContent = config.team_name || defaultConfig.team_name;
+      }
+
+      // Update font family
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      document.querySelectorAll('.headline').forEach(el => {
+        el.style.fontFamily = `${fontFamily}, serif`;
+      });
+
+      // Update font size
+      const fontSize = config.font_size || defaultConfig.font_size;
+      document.querySelectorAll('.body-text').forEach(el => {
+        el.style.fontSize = `${fontSize}px`;
+      });
+    }
+
+    // Map to Capabilities
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              config.background_color = value;
+              window.elementSdk.setConfig({ background_color: value });
+            }
+          },
+          {
+            get: () => config.primary_color || defaultConfig.primary_color,
+            set: (value) => {
+              config.primary_color = value;
+              window.elementSdk.setConfig({ primary_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          },
+          {
+            get: () => config.secondary_color || defaultConfig.secondary_color,
+            set: (value) => {
+              config.secondary_color = value;
+              window.elementSdk.setConfig({ secondary_color: value });
+            }
+          },
+          {
+            get: () => config.accent_color || defaultConfig.accent_color,
+            set: (value) => {
+              config.accent_color = value;
+              window.elementSdk.setConfig({ accent_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || defaultConfig.font_family,
+          set: (value) => {
+            config.font_family = value;
+            window.elementSdk.setConfig({ font_family: value });
+          }
+        },
+        fontSizeable: {
+          get: () => config.font_size || defaultConfig.font_size,
+          set: (value) => {
+            config.font_size = value;
+            window.elementSdk.setConfig({ font_size: value });
+          }
+        }
+      };
+    }
+
+    // Map to Edit Panel Values
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['newspaper_title', config.newspaper_title || defaultConfig.newspaper_title],
+        ['game_name', config.game_name || defaultConfig.game_name],
+        ['intro_text', config.intro_text || defaultConfig.intro_text],
+        ['team_name', config.team_name || defaultConfig.team_name]
+      ]);
+    }
+
+    // Initialize Element SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    // Initialize first question for quiz
+    renderQuestion();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cab4fbe3042c7c6',t:'MTc3MDU1NTY0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
