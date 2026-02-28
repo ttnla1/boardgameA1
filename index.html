@@ -128,7 +128,16 @@ style="font-family: 'Spectral', serif;">
 ❧ ✦ ❧
 </div>
     </div><!-- Navigation -->
-    <nav class="flex flex-wrap justify-center gap-4 md:gap-8 py-4 border-b border-stone-300"><button onclick="showSection('home')" class="nav-item active text-sm md:text-base tracking-wider text-stone-800 hover:text-amber-800" style="font-family: 'Playfair Display', serif;" data-section="home"> TRANG CHỦ </button> <button onclick="showSection('members')" class="nav-item text-sm md:text-base tracking-wider text-stone-800 hover:text-amber-800" style="font-family: 'Playfair Display', serif;" data-section="members"> THÀNH VIÊN </button> <button onclick="showSection('rules')" class="nav-item text-sm md:text-base tracking-wider text-stone-800 hover:text-amber-800" style="font-family: 'Playfair Display', serif;" data-section="rules"> LUẬT CHƠI </button> <button onclick="showSection('gallery')" class="nav-item text-sm md:text-base tracking-wider text-stone-800 hover:text-amber-800" style="font-family: 'Playfair Display', serif;" data-section="gallery"> HÌNH ẢNH </button> <button onclick="showSection('quiz')" class="nav-item text-sm md:text-base tracking-wider text-stone-800 hover:text-amber-800" style="font-family: 'Playfair Display', serif;" data-section="quiz"> CÂU HỎI </button><button onclick="showSection('scenarios')" 
+    <nav class="flex flex-wrap justify-center gap-4 md:gap-8 py-4 border-b border-stone-300">
+     <button onclick="showSection('home')" class="nav-item active text-sm md:text-base tracking-wider text-stone-800 hover:text-amber-800" style="font-family: 'Playfair Display', serif;" data-section="home"> TRANG CHỦ </button> 
+     <button onclick="showSection('members')" class="nav-item text-sm md:text-base tracking-wider text-stone-800 hover:text-amber-800" style="font-family: 'Playfair Display', serif;" data-section="members"> THÀNH VIÊN </button> 
+     <button onclick="showSection('author')" class="nav-button">
+    ✍️ Tác Giả
+</button>
+     <button onclick="showSection('rules')" class="nav-item text-sm md:text-base tracking-wider text-stone-800 hover:text-amber-800" style="font-family: 'Playfair Display', serif;" data-section="rules"> LUẬT CHƠI </button> 
+     <button onclick="showSection('gallery')" class="nav-item text-sm md:text-base tracking-wider text-stone-800 hover:text-amber-800" style="font-family: 'Playfair Display', serif;" data-section="gallery"> HÌNH ẢNH </button> 
+     <button onclick="showSection('quiz')" class="nav-item text-sm md:text-base tracking-wider text-stone-800 hover:text-amber-800" style="font-family: 'Playfair Display', serif;" data-section="quiz"> CÂU HỎI </button>
+     <button onclick="showSection('scenarios')" 
         class="nav-button">
     🎭 Kịch Bản
 </button>
@@ -332,6 +341,72 @@ style="font-family: 'Spectral', serif;">
        </div>
       </div>
      </div>
+     </section><!-- AUTHOR SECTION -->
+    <section id="section-author" class="hidden animate-fade-in">
+     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><!-- Author Bio -->
+      <div class="lg:col-span-2 article-border p-6 relative">
+       <div class="decorative-corner corner-tl"></div>
+       <div class="decorative-corner corner-tr"></div>
+       <div class="decorative-corner corner-bl"></div>
+       <div class="decorative-corner corner-br"></div>
+       <h2 class="text-3xl md:text-4xl text-stone-900 text-center mb-2" style="font-family: 'Playfair Display', serif; font-weight: 700;">✍️ ANTOINE DE SAINT-EXUPÉRY ✍️</h2>
+       <div class="headline-underline mx-auto w-1/2 mb-6"></div>
+       <div class="mb-6">
+        <h3 class="text-2xl font-bold text-amber-800 mb-3" style="font-family: 'Playfair Display', serif;">👤 Tiểu Sử Tác Giả</h3>
+        <div class="space-y-4" style="font-family: 'Lora', serif; font-size: 0.95rem; line-height: 1.8;">
+         <p><span class="font-bold text-amber-700">Antoine de Saint-Exupéry</span> (1900-1944) là một nhà văn, nhà thơ và phi công người Pháp nổi tiếng. Ông sinh ra tại Lyon, Pháp, trong một gia đình quý tộc có truyền thống quân sự và ngoại giao.</p>
+         <p>Saint-Exupéry là một phi công đam mê, tham gia vào các chuyến bay tiên phong và hoạt động quân sự. Những trải nghiệm bay của ông đã truyền cảm hứng cho hầu hết các tác phẩm của mình. Ông mất tích vào năm 1944 khi thực hiện một nhiệm vụ bay do thám phục vụ Pháp Tự Do trong Thế chiến II.</p>
+         <p>Ngoài <span class="italic">"Hoàng Tử Bé"</span>, ông còn viết những tác phẩm nổi tiếng khác như <span class="italic">"Night Flight"</span> (Chuyến Bay Ban Đêm) và <span class="italic">"Wind, Sand and Stars"</span> (Gió, Cát và Sao). Các tác phẩm của ông kết hợp triết học sâu sắc với những câu chuyện mã nhân văn đầy cảm xúc.</p>
+        </div>
+       </div>
+       <div class="mb-6">
+        <h3 class="text-2xl font-bold text-amber-800 mb-3" style="font-family: 'Playfair Display', serif;">🎭 Phong Cách Sáng Tạo</h3>
+        <div class="space-y-3" style="font-family: 'Lora', serif; font-size: 0.95rem; line-height: 1.8;">
+         <p>Saint-Exupéry được biết đến với khả năng kết hợp những ý tưởng triết học phức tạp với những câu chuyện giản dị nhưng sâu sắc. Phong cách viết của ông đặc trưng bởi:</p>
+         <ul class="space-y-2 ml-4">
+          <li class="flex gap-2"><span class="text-amber-700">•</span> <span><span class="font-semibold">Tính chất biểu tượng:</span> Sử dụng các ẩn dụ và tượng trưng để truyền tải thông điệp sâu sắc</span></li>
+          <li class="flex gap-2"><span class="text-amber-700">•</span> <span><span class="font-semibold">Giản dị nhưng sâu sắc:</span> Các câu chuyện tưởng như đơn giản nhưng chứa đựng những bài học mâu mũn</span></li>
+          <li class="flex gap-2"><span class="text-amber-700">•</span> <span><span class="font-semibold">Nhân văn và yêu thương:</span> Luôn nhấn mạnh giá trị của các mối quan hệ con người</span></li>
+          <li class="flex gap-2"><span class="text-amber-700">•</span> <span><span class="font-semibold">Tính lãng mạn:</span> Một cảm giác thơ mộng và tao nhân kết hợp với chiêm nghiệm cuộc sống</span></li>
+         </ul>
+        </div>
+       </div>
+      </div><!-- Book Info -->
+      <div class="space-y-6">
+       <div class="article-border p-4 bg-gradient-to-br from-rose-50 to-pink-50">
+        <h3 class="text-lg font-bold text-rose-800 border-b-2 border-rose-300 pb-2 mb-3" style="font-family: 'Playfair Display', serif;">📖 HOÀNG TỬ BÉ</h3>
+        <div class="space-y-3 text-sm" style="font-family: 'Lora', serif;">
+         <div class="flex justify-between"><span class="text-stone-600">Năm xuất bản:</span> <span class="font-semibold">1943</span>
+         </div>
+         <div class="flex justify-between"><span class="text-stone-600">Ngôn ngữ gốc:</span> <span class="font-semibold">Tiếng Pháp</span>
+         </div>
+         <div class="flex justify-between"><span class="text-stone-600">Loại tác phẩm:</span> <span class="font-semibold">Tiểu thuyết, Triết học</span>
+         </div>
+         <div class="flex justify-between"><span class="text-stone-600">Số trang:</span> <span class="font-semibold">~95 trang</span>
+         </div>
+        </div>
+       </div>
+       <div class="article-border p-4 bg-gradient-to-br from-amber-50 to-orange-50">
+        <h3 class="text-lg font-bold text-amber-800 border-b-2 border-amber-300 pb-2 mb-3" style="font-family: 'Playfair Display', serif;">💡 THÔNG ĐIỆP CHÍNH</h3>
+        <ul class="space-y-2 text-sm" style="font-family: 'Lora', serif;">
+         <li class="flex gap-2"><span class="text-amber-700 flex-shrink-0">▸</span> <span>Giá trị thực của cuộc sống nằm ở tình cảm và kết nối</span></li>
+         <li class="flex gap-2"><span class="text-amber-700 flex-shrink-0">▸</span> <span>Trách nhiệm là cơ sở của yêu thương</span></li>
+         <li class="flex gap-2"><span class="text-amber-700 flex-shrink-0">▸</span> <span>Cái thiểu bé có thể lớn lao nếu được yêu thương</span></li>
+         <li class="flex gap-2"><span class="text-amber-700 flex-shrink-0">▸</span> <span>Người lớn hay quên đi những điều quan trọng nhất</span></li>
+        </ul>
+       </div>
+       <div class="article-border p-4 bg-gradient-to-br from-purple-50 to-indigo-50">
+        <h3 class="text-lg font-bold text-purple-800 border-b-2 border-purple-300 pb-2 mb-3" style="font-family: 'Playfair Display', serif;">🌍 HƯỞNG ỨNG TOÀN CẦU</h3>
+        <div class="space-y-2 text-sm" style="font-family: 'Lora', serif;">
+         <p class="text-stone-600"><span class="font-bold text-purple-700">Dịch sang:</span><br>
+          Hơn 300 ngôn ngữ</p>
+         <p class="text-stone-600 mt-2"><span class="font-bold text-purple-700">Bán chạy:</span><br>
+          Hơn 200 triệu bản</p>
+         <p class="text-stone-600 mt-2"><span class="font-bold text-purple-700">Ảnh hưởng:</span><br>
+          Một trong những tác phẩm văn học được yêu thích nhất thế giới</p>
+        </div>
+       </div>
+      </div>
     </section><!-- RULES SECTION -->
     <section id="section-rules" class="hidden animate-fade-in">
      <div class="article-border p-6 relative mb-6">
@@ -1082,6 +1157,7 @@ style="font-family: 'Spectral', serif;">
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d3e0fa8e75ff408',t:'MTc3MjA5NDQyNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
  </html>
+
 
 
 
